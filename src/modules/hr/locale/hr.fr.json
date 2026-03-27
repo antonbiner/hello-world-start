@@ -1,0 +1,528 @@
+{
+  "title": "Ressources Humaines",
+  "dashboard": "Tableau de bord",
+  "employees": "Employés",
+  "attendance": "Pointage",
+  "leaves": "Congés",
+  "payroll": "Paie",
+  "loading": "Chargement...",
+  "save": "Enregistrer",
+  "cancel": "Annuler",
+
+  "header": {
+    "subtitle": "Gérer les employés, le pointage, les congés et la paie"
+  },
+
+  "employeesPage": {
+    "subtitle": "Employés depuis la table Users + détails RH",
+    "emptyTitle": "Aucun employé trouvé",
+    "emptyHint": "Essayez d’ajuster la recherche ou les filtres.",
+    "payrollStatus": "Statut paie",
+    "payrollReady": "Paie prête",
+    "missingSalary": "Fiche salaire manquante",
+    "filters": {
+      "all": "Tout",
+      "missingSalary": "À configurer (salaire)",
+      "payrollReady": "Paie prête"
+    }
+  },
+
+  "summary": {
+    "headcount": "Effectif total",
+    "absentToday": "Absents aujourd'hui",
+    "pendingLeaves": "Demandes de congé en attente",
+    "payrollTotal": "Total paie (mois)"
+  },
+
+  "dashboardPage": {
+    "headcountHint": "Depuis votre table Users (employés actifs).",
+    "absentTodayHint": "Collaborateurs en congé approuvé aujourd'hui.",
+    "pendingLeavesHint": "Toutes les demandes en attente (équipe).",
+    "payrollTotalHint": "Générez un run de paie pour voir les totaux ici.",
+    "activityTitle": "Activité récente",
+    "activityBadge": "En direct",
+    "activityAttendance": "Pointage",
+    "activityLeaves": "Congés",
+    "activityEmptyAttendance": "Aucun pointage pour ce mois pour l’instant.",
+    "activityEmptyLeaves": "Aucune demande de congé pour l’instant.",
+    "activityHint": "Astuce : utilisez les anomalies de pointage pour repérer vite les sorties manquantes et les heures sup.",
+    "nextStepsTitle": "Prochaines étapes",
+    "nextStepsHint": "Ordre recommandé pour une paie fiable.",
+    "nextStepsAttendance": "Compléter le pointage",
+    "nextStepsLeaves": "Valider les congés",
+    "nextStepsPayroll": "Générer la paie",
+    "insightsTitle": "Insights",
+    "preview": "Aperçu",
+    "complianceTitle": "Paie Tunisie prête",
+    "complianceHint": "L’aperçu du salaire net utilise les règles 2025 (CNSS, CSS, IRPP). Le backend persistera et auditera les runs.",
+    "attendanceQualityTitle": "Qualité du pointage",
+    "attendanceQualityHint": "Importez Excel ou saisissez manuellement pour obtenir des indicateurs fiables (absences/retards/paie).",
+    "insightsFootnote": "Une fois le backend connecté, ces cartes afficheront les KPIs réels (absences, retards, validations).",
+    "quickStartTitle": "Démarrage rapide",
+    "quickStartAttendance": "Importer le pointage",
+    "quickStartLeaves": "Vérifier les congés",
+    "quickStartPayroll": "Générer un run de paie",
+    "quickStartHint": "Commencez par le pointage, puis les congés, puis la paie."
+  },
+
+  "dashboardOps": {
+    "title": "Aperçu opérations",
+    "badge": "À traiter",
+    "payrollReadiness": "Préparation paie",
+    "missingSalary": "Employés sans fiche salaire",
+    "attendanceQuality": "Anomalies pointage",
+    "missingCheckout": "Employés avec sortie manquante",
+    "overtime": "Heures sup.",
+    "overtimeRecords": "Enregistrements avec heures sup.",
+    "needsAttention": "À traiter",
+    "openEmployees": "Employés",
+    "openAttendance": "Pointage",
+    "allGood": "Tout est OK pour le moment.",
+    "missingSalaryTitle": "Fiche salaire",
+    "missingCheckoutTitle": "Sorties manquantes",
+    "andMore": "+{{count}} de plus",
+    "recommended": "Actions recommandées",
+    "recommendedHint": "Corrigez ces points pour fiabiliser la paie.",
+    "recommendedSalary": "Compléter les fiches salaire",
+    "recommendedAttendance": "Corriger les anomalies",
+    "recommendedPayroll": "Construire un brouillon de paie"
+  },
+
+  "employee": {
+    "employee": "Employé",
+    "name": "Nom",
+    "department": "Département",
+    "position": "Poste",
+    "hireDate": "Date d'embauche",
+    "employmentType": "Type de contrat",
+    "grossSalary": "Salaire brut",
+    "cnssNumber": "N° CNSS",
+    "bankAccount": "Compte bancaire",
+    "familyStatus": "Situation familiale",
+    "headOfFamily": "Chef de famille",
+    "childrenCount": "Enfants",
+    "customDeductions": "Déductions personnalisées",
+    "saveSalaryConfig": "Enregistrer la configuration salariale",
+    "salaryConfigSaved": "Configuration salariale enregistrée",
+    "salaryConfigHint": "Renseignez le brut et la situation familiale pour prévisualiser le net et les taxes.",
+    "netPreview": "Aperçu net",
+    "irppPreview": "Aperçu IRPP"
+  },
+
+  "employeeHr": {
+    "section": {
+      "identity": "Identité",
+      "contact": "Contact d’urgence",
+      "address": "Adresse"
+    },
+    "cin": "CIN",
+    "birthDate": "Date de naissance",
+    "maritalStatus": "Situation matrimoniale",
+    "addressLine1": "Adresse (ligne 1)",
+    "addressLine2": "Adresse (ligne 2)",
+    "city": "Ville",
+    "postalCode": "Code postal",
+    "emergencyContactName": "Nom du contact",
+    "emergencyContactPhone": "Téléphone du contact",
+    "marital": {
+      "single": "Célibataire",
+      "married": "Marié(e)",
+      "divorced": "Divorcé(e)",
+      "widowed": "Veuf/Veuve"
+    }
+  },
+
+  "attendancePage": {
+    "subtitle": "Suivi mensuel (heures, heures sup., absences) en Tunisie",
+    "month": "Mois",
+    "year": "Année",
+    "importExcel": "Importer Excel",
+    "manualEntry": "Saisie manuelle",
+    "settings": "Paramètres",
+    "summary": "Résumé",
+    "gridTab": "Grille",
+    "monthlyGridTitle": "Grille mensuelle",
+    "days": "Jours",
+    "weekend": "Week-end",
+    "matrixView": "Matrice",
+    "listView": "Liste",
+    "emptyTitle": "Aucun pointage pour ce mois",
+    "emptyHint": "Importez depuis Excel ou ajoutez une saisie manuelle pour commencer.",
+    "noEmployeesHint": "Aucun employé trouvé. Ajoutez des utilisateurs ou vérifiez vos droits.",
+    "manualEntryHint": "Astuce : saisissez l’entrée et la sortie. Les heures/statuts seront calculés côté backend une fois connecté."
+    ,
+    "importTitle": "Import du pointage",
+    "importExampleNote": "Importé depuis Excel"
+  },
+
+  "attendanceFields": {
+    "date": "Date",
+    "checkIn": "Entrée",
+    "checkOut": "Sortie",
+    "breakDuration": "Pause (min)",
+    "status": "Statut",
+    "notes": "Notes",
+    "source": "Source",
+    "hoursWorked": "Heures travaillées",
+    "overtimeHours": "Heures sup."
+  },
+
+  "attendanceAnomalies": {
+    "all": "Tout",
+    "filteredHint": "Affichage des enregistrements signalés uniquement.",
+    "missingCheckout": "Sortie manquante",
+    "late": "Retard",
+    "overtime": "Heures sup."
+  },
+
+  "attendanceSettings": {
+    "companyLevel": "Paramètres société",
+    "weekendDaysLabel": "Jours week-end (0=Dim ... 6=Sam)",
+    "hint": "Ces paramètres définissent comment les heures, heures sup. et retards sont calculés pour toute l’entreprise.",
+    "roundingMethod": "Méthode d’arrondi",
+    "calculationMethod": "Méthode de calcul",
+    "holidays": "Jours fériés",
+    "holidaysPlaceholder": "YYYY-MM-DD (un par ligne)\n2026-01-01\n2026-03-20",
+    "holidaysHint": "Utilisé pour marquer les jours fériés dans la grille mensuelle.",
+    "days": {
+      "sun": "Dim",
+      "mon": "Lun",
+      "tue": "Mar",
+      "wed": "Mer",
+      "thu": "Jeu",
+      "fri": "Ven",
+      "sat": "Sam"
+    },
+    "rounding": {
+      "none": "Aucun",
+      "15min": "Arrondi à 15 minutes",
+      "30min": "Arrondi à 30 minutes",
+      "hour": "Arrondi à 1 heure"
+    },
+    "calculation": {
+      "actual_hours": "Heures réelles",
+      "standard_day": "Journée standard",
+      "custom": "Personnalisé"
+    },
+    "standardHoursPerDay": "Heures standard/jour",
+    "overtimeThreshold": "Seuil heures sup. (heures)",
+    "overtimeMultiplier": "Coefficient heures sup.",
+    "lateThresholdMinutes": "Seuil retard (minutes)"
+  },
+
+  "attendanceStatus": {
+    "present": "Présent",
+    "absent": "Absent",
+    "late": "En retard",
+    "half_day": "Demi-journée",
+    "leave": "Congé",
+    "holiday": "Jour férié"
+  },
+
+  "payrollSlip": {
+    "grossSalary": "Salaire brut",
+    "cnss": "CNSS",
+    "taxableGross": "Brut imposable",
+    "abattement": "Abattement",
+    "taxableBase": "Base imposable",
+    "irpp": "IRPP",
+    "css": "CSS",
+    "netSalary": "Salaire net",
+    "brackets": "Tranches",
+    "from": "De",
+    "to": "À",
+    "rate": "Taux",
+    "taxableInBracket": "Montant dans tranche",
+    "taxAmount": "Montant impôt",
+    "tunisianLaw2025": "Loi tunisienne (2025)",
+    "methodology": "Méthodologie",
+    "methodologyHint": "Tous les montants sont calculés mensuellement avec des tranches IRPP progressives.",
+    "totalDeductions": "Total retenues",
+    "bracketCount": "tranches",
+    "infinity": "∞"
+  },
+
+  "sidebarDescriptions": {
+    "hr": "Gérer les employés, le pointage, les congés et la paie"
+  },
+
+  "tabs": {
+    "overview": "Aperçu",
+    "profile": "Profil",
+    "schedule": "Planning",
+    "salary": "Salaire"
+  },
+
+  "labels": {
+    "email": "Email",
+    "employeeNotFound": "Employé introuvable.",
+    "employeeId": "ID employé",
+    "phone": "Téléphone"
+  },
+
+  "payrollPage": {
+    "generatePayroll": "Générer la paie",
+    "runsTitle": "Runs de paie",
+    "subtitle": "Fiches de paie en TND (loi tunisienne 2025)",
+    "generateRunTitle": "Générer un run de paie",
+    "month": "Mois",
+    "status": "Statut",
+    "totalNet": "Total net",
+    "overviewTitle": "Aperçu paie",
+    "overviewHint": "Construisez un run brouillon depuis Employés, Pointage et Congés. Vérifiez les fiches, puis confirmez quand le backend sera prêt.",
+    "runsHint": "Les brouillons sont stockés localement sur cet appareil.",
+    "generateRunHint": "Choisissez mois/année. Le système calcule un brouillon via la fiche salaire + le pointage + les congés approuvés."
+  },
+
+  "payrollDraft": {
+    "runsHint": "Les brouillons sont stockés localement sur cet appareil.",
+    "emptyTitle": "Aucun brouillon pour l’instant",
+    "emptyHint": "Générez votre premier brouillon pour vérifier les fiches et les totaux.",
+    "open": "Ouvrir",
+    "entriesTitle": "Entrées (brouillon)",
+    "noActiveRunTitle": "Aucun brouillon sélectionné",
+    "noActiveRunHint": "Ouvrez un brouillon depuis la liste (ou générez-en un nouveau).",
+    "gross": "Brut",
+    "net": "Net",
+    "deductions": "Retenues",
+    "workedDays": "Jours",
+    "details": "Détails",
+    "viewSlip": "Voir la fiche",
+    "slipTitle": "Fiche de paie",
+    "noSlip": "Sélectionnez un employé pour afficher la fiche.",
+    "daysWorkedAndLeave": "Travaillé {{worked}} · Congé {{leave}}",
+    "kpis": {
+      "totalNet": "Total net",
+      "totalCnss": "CNSS",
+      "totalIrpp": "IRPP",
+      "period": "Période",
+      "pendingLeaves": "Congés en attente",
+      "totalHours": "Heures",
+      "totalOvertime": "Heures sup."
+    },
+    "issues": {
+      "missingSalary": "Fiche salaire manquante"
+    },
+    "selectAll": "Tout sélectionner",
+    "selectEmployee": "Sélectionner l’employé",
+    "actions": {
+      "confirm": "Confirmer",
+      "markPaid": "Marquer payé",
+      "confirmed": "Run de paie confirmé",
+      "paid": "Paie marquée comme payée"
+    },
+    "export": {
+      "button": "Exporter PDF",
+      "exporting": "Export…",
+      "preparing": "Préparation des PDFs…",
+      "done": "Export terminé",
+      "doneHint": "{{count}} PDF(s) téléchargé(s).",
+      "error": "Échec de l’export"
+    },
+    "pdf": {
+      "title": "Fiche de paie",
+      "employee": "Employé",
+      "period": "Période"
+    }
+  },
+
+  "payrollSettings": {
+    "title": "Paramètres de paie",
+    "hint": "Le backend persistera les taux CNSS/CSS et les tranches IRPP configurables. Valeurs par défaut: loi 2025.",
+    "ratesTitle": "Taux",
+    "defaultsBadge": "Valeurs 2025",
+    "cnssRate": "Taux CNSS",
+    "cssRate": "Taux CSS",
+    "abattementTitle": "Abattement",
+    "headOfFamily": "Chef de famille",
+    "perChild": "Par enfant",
+    "bracketsTitle": "Tranches IRPP",
+    "bracketsHint": "Tranches mensuelles progressives (par portion).",
+    "resetDefaults": "Réinitialiser aux valeurs 2025"
+  },
+
+  "leavesPage": {
+    "subtitle": "Demandes, validations et soldes",
+    "newRequest": "Nouvelle demande de congé",
+    "newRequestHint": "Choisissez l’employé et les dates, puis soumettez la demande.",
+    "calendarTab": "Calendrier",
+    "listTab": "Liste",
+    "balancesTab": "Soldes",
+    "approvalsTab": "Validations",
+    "calendarHint": "Vue calendrier des congés de l’équipe.",
+    "calendarEmptyHint": "Aucun congé approuvé à afficher pour l’instant.",
+    "listTitle": "Demandes de congé",
+    "status": "Statut",
+    "noLeaves": "Aucune demande de congé.",
+    "balancesTitle": "Soldes de congés",
+    "approvalTitle": "Validations",
+    "approvalHint": "Vérifiez les demandes en attente puis approuvez/rejetez.",
+    "actions": "Actions",
+    "approve": "Approuver",
+    "reject": "Rejeter",
+    "approvalEmptyTitle": "Rien à valider",
+    "approvalEmptyHint": "Aucune demande en attente pour le moment.",
+    "type": "Type",
+    "dates": "Dates",
+    "allowance": "Droit annuel",
+    "used": "Pris",
+    "pending": "En attente",
+    "remaining": "Restant",
+    "startDate": "Date début",
+    "endDate": "Date fin",
+    "reason": "Motif"
+  },
+
+  "leaveStatus": {
+    "pending": "En attente",
+    "approved": "Approuvé",
+    "rejected": "Rejeté",
+    "cancelled": "Annulé"
+  },
+
+  "leaveType": {
+    "annual": "Congé annuel",
+    "sick": "Congé maladie",
+    "unpaid": "Congé sans solde",
+    "maternity": "Congé maternité",
+    "paternity": "Congé paternité"
+  },
+
+  "common": {
+    "backendRequired": "Backend requis",
+    "searchPlaceholder": "Rechercher...",
+    "filters": "Filtres",
+    "clearAll": "Tout effacer",
+    "all": "Tous",
+    "select": "Sélectionner",
+    "filter": "filtre",
+    "filtersPlural": "filtres",
+    "today": "Aujourd’hui",
+    "prev": "Préc.",
+    "next": "Suiv."
+  },
+
+  "filters": {
+    "employee": "Employé",
+    "status": "Statut",
+    "type": "Type"
+  },
+
+  "departments": {
+    "title": "Départements",
+    "subtitle": "Gérer les départements et la structure organisationnelle",
+    "orgChart": "Organigramme",
+    "orgChartTitle": "Organigramme",
+    "orgChartSubtitle": "Départements et membres d'équipe en un coup d'œil",
+    "orgChartEmpty": "Aucun département ou employé à afficher. Ajoutez des départements ou assignez des employés.",
+    "add": "Ajouter un département",
+    "addHint": "Créer un nouveau département. Le backend persistera une fois connecté.",
+    "edit": "Modifier le département",
+    "listTitle": "Départements",
+    "listHint": "Départements de la config HR plus ceux dérivés des profils salariaux.",
+    "name": "Nom",
+    "namePlaceholder": "ex. Ingénierie",
+    "nameRequired": "Le nom du département est requis.",
+    "code": "Code",
+    "codePlaceholder": "ex. ENG",
+    "description": "Description",
+    "descriptionPlaceholder": "Description optionnelle",
+    "employees": "Employés",
+    "manage": "Gérer les départements",
+    "created": "Département créé.",
+    "updated": "Département mis à jour.",
+    "deleted": "Département supprimé.",
+    "createError": "Échec de la création du département.",
+    "updateError": "Échec de la mise à jour du département.",
+    "deleteError": "Échec de la suppression du département.",
+    "delete": "Supprimer",
+    "deleteTitle": "Supprimer le département ?",
+    "deleteHint": "Cela supprimera le département. Les affectations des employés devront être mises à jour séparément."
+  },
+
+  "reports": {
+    "title": "Rapports de pointage",
+    "subtitle": "Analyses et synthèses par département et employé",
+    "exportExcel": "Exporter Excel",
+    "exportSuccess": "Rapport exporté avec succès.",
+    "exportError": "Échec de l'export.",
+    "sheetName": "Pointage",
+    "summaryPresent": "Présents",
+    "summaryLate": "Retards",
+    "summaryAbsent": "Absents",
+    "summaryOvertime": "Heures sup. (h)",
+    "presentHint": "Enregistrements avec statut présent",
+    "lateHint": "Enregistrements avec statut retard",
+    "absentHint": "Enregistrements avec statut absent",
+    "overtimeHint": "Total des heures supplémentaires",
+    "statusDistribution": "Répartition par statut",
+    "statusDistributionHint": "Breakdown par statut de pointage",
+    "dailyTrend": "Tendance quotidienne",
+    "dailyTrendHint": "Présents, retards, absents par jour",
+    "byDepartment": "Par département",
+    "byDepartmentHint": "Agrégé par département",
+    "byEmployee": "Par employé",
+    "byEmployeeHint": "Détail par employé",
+    "present": "Présent",
+    "late": "Retard",
+    "absent": "Absent",
+    "leave": "Congé",
+    "hours": "Heures",
+    "overtime": "Heures sup.",
+    "employee": "Employé",
+    "records": "Enregistrements",
+    "noData": "Aucune donnée pour cette période"
+  },
+
+  "employeeEdit": {
+    "personalInfo": "Informations personnelles",
+    "profilePicture": "Photo de profil",
+    "workInfo": "Informations professionnelles",
+    "compensation": "Rémunération",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "selectDepartment": "Sélectionner un département",
+    "departmentPlaceholder": "ex. Ingénierie, Ventes",
+    "departmentHint": "Sélectionnez dans la liste ou saisissez un nouveau département.",
+    "positionPlaceholder": "ex. Ingénieur logiciel",
+    "employmentFullTime": "Temps plein",
+    "employmentPartTime": "Temps partiel",
+    "employmentContract": "Contrat",
+    "saved": "Informations employé enregistrées.",
+    "userUpdateError": "Échec de la mise à jour de l'utilisateur (API Users).",
+    "hrSavedOnly": "Détails RH enregistrés. Mise à jour utilisateur échouée.",
+    "hrUpdateError": "Échec de l'enregistrement des détails RH."
+  },
+
+  "employeeDetail": {
+    "metrics": {
+      "attendance": "Pointage (mois)",
+      "pendingLeaves": "Congés en attente",
+      "salary": "Salaire",
+      "salaryHint": "Configurée dans la fiche salaire RH.",
+      "salaryMissing": "Définissez le salaire pour activer la paie."
+      ,
+      "pendingLeavesHint": "Depuis les congés Planning",
+      "attendanceHint": "Présent {{present}} · Retard {{late}} · Absent {{absent}} · Congé {{leave}}"
+    },
+    "overviewTitle": "Aperçu employé",
+    "overviewHint": "Utilisez cet aperçu pour repérer les infos manquantes avant la paie.",
+    "documentsTitle": "Documents & pièces jointes",
+    "notHeadOfFamily": "Non chef de famille",
+    "kpis": {
+      "attendance": "Pointage (mois)",
+      "leaves": "Congés",
+      "pending": "En attente",
+      "payrollDraft": "Dernier brouillon de paie",
+      "payrollDraftHint": "Net {{net}} TND · {{status}}",
+      "noPayrollDraft": "Aucun brouillon de paie pour l’instant."
+    },
+    "scheduleHint": "Les horaires sont chargés depuis le planning.",
+    "day": "Jour",
+    "workingHours": "Horaires",
+    "lunch": "Pause",
+    "off": "Repos",
+    "noLeaves": "Aucune demande de congé pour cet employé."
+  }
+}
+
