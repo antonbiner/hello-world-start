@@ -34,6 +34,8 @@ export function shouldSkipOfflineQueueForEndpoint(endpoint: string): boolean {
   if (path.includes("/systemlogs")) return true;
   // Read-only validation used by planning UI; no persisted mutation.
   if (path.includes("/planning/validate-assignment")) return true;
+  // Authentication operations must happen online or fail immediately.
+  if (path.includes("/auth/")) return true;
   return false;
 }
 
