@@ -177,6 +177,7 @@ export interface CreateDailyTaskRequestDto {
   relatedEntityId?: number;
   assignedUserId?: number;
   dueDate?: string;
+  priority?: string;
 }
 
 export interface UpdateProjectTaskRequestDto {
@@ -199,6 +200,8 @@ export interface UpdateDailyTaskRequestDto {
   relatedEntityId?: number;
   assignedUserId?: number;
   dueDate?: string;
+  isCompleted?: boolean;
+  completedDate?: string;
 }
 
 export interface MoveTaskRequestDto {

@@ -57,6 +57,7 @@ const MODULE_ICONS: Record<PermissionModule, React.ReactNode> = {
   documents: <FileArchive className="h-4 w-4" />,
   dynamic_forms: <FileText className="h-4 w-4" />,
   ai_assistant: <Activity className="h-4 w-4" />,
+  hr: <Users className="h-4 w-4" />,
 };
 
 export function RolePermissionsEditor({ role, onClose }: RolePermissionsEditorProps) {

@@ -369,37 +369,38 @@ export function UnassignedJobsList({
         
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between mb-1">
-            <h4 className="font-medium leading-tight" style={{ fontSize: '0.7rem' }}>
+            <h4 className="font-medium text-xs leading-tight">
               {job.title}
             </h4>
-            <Badge variant={getPriorityColor(job.priority)} className="text-[0.6rem] px-1 py-0 h-4">
+            <Badge variant={getPriorityColor(job.priority)} className="text-[0.65rem] px-1.5 py-0 h-[18px] flex items-center gap-0.5">
+              {job.priority === 'urgent' && <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />}
               {t(`dispatcher.priority_${job.priority}`)}
             </Badge>
           </div>
           
           {job.description && (
-            <p className="text-muted-foreground mb-1 leading-tight" style={{ fontSize: '0.65rem' }}>
+            <p className="text-muted-foreground mb-1 leading-tight text-[0.7rem]">
               {job.description}
             </p>
           )}
           
           <div className="space-y-0.5">
-            <div className="flex items-center gap-1.5 text-muted-foreground" style={{ fontSize: '0.65rem' }}>
-              <User className="h-2 w-2 flex-shrink-0" />
+            <div className="flex items-center gap-1.5 text-muted-foreground text-[0.7rem]">
+              <User className="h-2.5 w-2.5 flex-shrink-0" />
               <span className="truncate">{job.customerName}</span>
             </div>
             
             {planningMode === 'job' && conversionMode === 'service' && (job.installationName || job.installationId) && (
-              <div className="flex items-center gap-1.5 text-muted-foreground" style={{ fontSize: '0.65rem' }}>
-                <Building2 className="h-2 w-2 flex-shrink-0" />
+              <div className="flex items-center gap-1.5 text-muted-foreground text-[0.7rem]">
+                <Building2 className="h-2.5 w-2.5 flex-shrink-0" />
                 <span className="truncate">
                   {job.installationName || t('dispatcher.loading_installation')}
                 </span>
               </div>
             )}
             
-            <div className="flex items-center gap-1.5 text-muted-foreground" style={{ fontSize: '0.65rem' }}>
-              <Clock className="h-2 w-2 flex-shrink-0" />
+            <div className="flex items-center gap-1.5 text-muted-foreground text-[0.7rem]">
+              <Clock className="h-2.5 w-2.5 flex-shrink-0" />
               <span>
                 {Math.floor(job.estimatedDuration / 60)}{t('dispatcher.hours_short')} {job.estimatedDuration % 60}{t('dispatcher.minutes_short')}
               </span>
@@ -410,12 +411,12 @@ export function UnassignedJobsList({
             <div className="mt-1">
               <div className="flex flex-wrap gap-0.5">
                 {job.requiredSkills.slice(0, 2).map((skill) => (
-                  <Badge key={skill} variant="outline" className="text-[0.6rem] px-0.5 py-0 h-4">
+                  <Badge key={skill} variant="outline" className="text-[0.65rem] px-1 py-0 h-[16px]">
                     {skill}
                   </Badge>
                 ))}
                 {job.requiredSkills.length > 2 && (
-                  <Badge variant="outline" className="text-[0.6rem] px-0.5 py-0 h-4">
+                  <Badge variant="outline" className="text-[0.65rem] px-1 py-0 h-[16px]">
                     +{job.requiredSkills.length - 2}
                   </Badge>
                 )}
@@ -487,11 +488,22 @@ export function UnassignedJobsList({
                 ))}
               </div>
             ) : groupedData.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
-                <Wrench className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                <p className="text-sm">
-                  {searchTerm ? t('common.noResults', 'No results found') : t('dispatcher.no_unassigned_jobs')}
-                </p>
+              <div className="text-center py-8 text-muted-foreground space-y-3">
+                <div className="mx-auto w-12 h-12 rounded-full bg-success/10 flex items-center justify-center">
+                  <Wrench className="h-6 w-6 text-success" />
+                </div>
+                {searchTerm ? (
+                  <p className="text-sm">{t('common.noResults', 'No results found')}</p>
+                ) : (
+                  <>
+                    <p className="text-sm font-medium text-foreground">
+                      {t('dispatcher.all_jobs_assigned', 'All jobs are assigned ✓')}
+                    </p>
+                    <p className="text-xs text-muted-foreground max-w-[200px] mx-auto">
+                      {t('dispatcher.empty_state_hint', 'Create a new service order to generate jobs for planning.')}
+                    </p>
+                  </>
+                )}
               </div>
             ) : (
               groupedData.map((serviceOrderData) => (
@@ -521,17 +533,18 @@ export function UnassignedJobsList({
                         <Package className="h-3.5 w-3.5 text-primary flex-shrink-0" />
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2">
-                            <span className="font-medium truncate" style={{ fontSize: '0.75rem' }}>
+                            <span className="font-medium truncate text-xs">
                               {serviceOrderData.title || `SO-${serviceOrderData.id}`}
                             </span>
                           </div>
-                          <div className="text-muted-foreground" style={{ fontSize: '0.65rem' }}>
+                          <div className="text-muted-foreground text-[0.7rem]">
                             {serviceOrderData.customerName} • {serviceOrderData.unassignedJobs.length} {t('dispatcher.jobs')}
                           </div>
                         </div>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <Badge variant={getPriorityColor(serviceOrderData.priority)} className="text-[0.6rem] px-1 py-0 h-4">
+                        <Badge variant={getPriorityColor(serviceOrderData.priority)} className="text-[0.65rem] px-1.5 py-0 h-[18px] flex items-center gap-0.5">
+                          {serviceOrderData.priority === 'urgent' && <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />}
                           {t(`dispatcher.priority_${serviceOrderData.priority}`)}
                         </Badge>
                         <ChevronDown 
@@ -578,12 +591,12 @@ export function UnassignedJobsList({
                                           )}
                                           <ChevronRight className={cn("h-3 w-3 text-muted-foreground transition-transform flex-shrink-0", isOpen && "rotate-90")} />
                                           <Building2 className="h-3 w-3 text-primary flex-shrink-0" />
-                                          <span className="font-medium flex-1 break-words leading-snug" style={{ fontSize: '0.7rem' }}>
+                                          <span className="font-medium flex-1 break-words leading-snug text-[0.75rem]">
                                             {group.name}
                                           </span>
                                         </div>
                                         <div className="flex items-center gap-1 pl-6">
-                                          <span className="text-muted-foreground" style={{ fontSize: '0.6rem' }}>
+                                          <span className="text-muted-foreground text-[0.65rem]">
                                             {group.jobs.length} {t('dispatcher.jobs')} • {totalHours}{t('dispatcher.hours_short')}
                                           </span>
                                         </div>

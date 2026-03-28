@@ -3,23 +3,43 @@
 
 // Main Task interface (aligned with backend ProjectTask)
 export interface Task {
-  id: string; // Frontend uses string for compatibility, backend uses int
+  id: string;
   title: string;
   description?: string;
-  taskType: string;
-  status: string; // Fixed: 'open', 'in progress', 'completed', 'cancelled'
+  taskType?: string;
+  status: string;
   relatedEntityType?: string;
   relatedEntityId?: number | string;
   dueDate?: Date | string;
   assignee?: string;
+  assigneeName?: string;
   assigneeId?: string | number;
   createdAt: Date | string;
   createdBy?: string;
   updatedAt?: Date | string;
   modifiedBy?: string;
-  // Kept for backward compatibility if needed, but discouraged
   projectId?: string;
   projectName?: string;
+  priority?: 'low' | 'medium' | 'high' | 'urgent' | string;
+  columnId?: string;
+  columnTitle?: string;
+  columnColor?: string;
+  completedAt?: Date | string;
+  tags?: string[];
+  estimatedHours?: number;
+  actualHours?: number;
+  position?: number;
+  lastMoved?: Date;
+  startDate?: Date | string;
+  contactId?: string;
+  contactName?: string;
+  parentTaskId?: string;
+  parentTaskTitle?: string;
+  attachments?: any[];
+  subTasks?: Task[];
+  commentsCount?: number;
+  attachmentsCount?: number;
+  [key: string]: any;
 }
 
 // Daily Task interface (aligned with backend DailyTask)
@@ -27,8 +47,8 @@ export interface DailyTask {
   id: string;
   title: string;
   description?: string;
-  taskType: string;
-  status: string; // Fixed: 'open', 'in progress', 'completed', 'cancelled'
+  taskType?: string;
+  status: string;
   relatedEntityType?: string;
   relatedEntityId?: number | string;
   dueDate?: Date | string;
@@ -38,6 +58,19 @@ export interface DailyTask {
   createdBy?: string;
   updatedAt?: Date | string;
   modifiedBy?: string;
+  isCompleted?: boolean;
+  priority?: 'low' | 'medium' | 'high' | 'urgent' | string;
+  completedDate?: Date | string;
+  completedAt?: Date | string;
+  actualHours?: number;
+  userId?: string;
+  userName?: string;
+  position?: number;
+  tags?: string[];
+  attachments?: any[];
+  commentsCount?: number;
+  attachmentsCount?: number;
+  [key: string]: any;
 }
 
 // Task Comment interface (aligned with backend TaskComment)

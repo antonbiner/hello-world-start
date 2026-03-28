@@ -86,7 +86,7 @@ export async function attachCachedGetAdapter(
     return true;
   }
   const buf = await cachedRes.arrayBuffer();
-  const { data, responseType } = shapeCachedBinaryPayload(buf, ct, config as Record<string, unknown>);
+  const { data, responseType } = shapeCachedBinaryPayload(buf, ct, config as unknown as Record<string, unknown>);
   (config as unknown as { responseType?: string }).responseType = responseType;
   (config as unknown as { adapter?: (c: InternalAxiosRequestConfig) => Promise<unknown> }).adapter = () =>
     Promise.resolve({

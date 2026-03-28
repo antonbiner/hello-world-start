@@ -13,7 +13,6 @@ import { Calendar, Clock, User, Edit, Trash2, FileText, Save, X, Loader2, UserPl
 import { useToast } from "@/hooks/use-toast";
 import { TaskComments } from "./TaskComments";
 import { TasksService } from "../services/tasks.service";
-import { TasksService } from "../services/tasks.service";
 import { notificationsApi } from "@/services/api/notificationsApi";
 
 interface Technician {

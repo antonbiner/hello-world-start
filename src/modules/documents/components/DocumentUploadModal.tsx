@@ -61,7 +61,7 @@ export function DocumentUploadModal({
   const [searching, setSearching] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<SearchResult | null>(null);
   const [showDropdown, setShowDropdown] = useState(false);
-  const searchTimeout = useRef<NodeJS.Timeout | null>(null);
+  const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const category = getCategoryFromModule(selectedRecord?.type || moduleType);

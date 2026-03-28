@@ -261,6 +261,7 @@ export interface InstallationDetails {
   matricule?: string;
   manufacturer?: string;
   siteAddress?: string;
+  location?: string;
 }
 
 interface ServiceOrderPDFDocumentProps {

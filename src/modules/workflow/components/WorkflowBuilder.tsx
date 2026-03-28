@@ -127,6 +127,8 @@ export function WorkflowBuilder() {
   const [aiBuilderOpen, setAiBuilderOpen] = useState(false); // AI workflow builder
   const [groupsManagerOpen, setGroupsManagerOpen] = useState(false); // Workflow groups manager
 
+  const aiAssistantAvailable = useAiAssistantAvailable();
+  const { t: tAiAssistant } = useTranslation('aiAssistant');
   useEffect(() => {
     if (!aiAssistantAvailable && aiBuilderOpen) setAiBuilderOpen(false);
   }, [aiAssistantAvailable, aiBuilderOpen]);
@@ -1108,7 +1110,7 @@ export function WorkflowBuilder() {
     }
   };
 
-  const executionTimeoutRef = useRef<NodeJS.Timeout[]>([]);
+  const executionTimeoutRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   // Get execution order using topological sort (handles parallel branches, conditionals)
   const getExecutionOrder = useCallback((nodes: Node[], edges: Edge[]): string[] => {

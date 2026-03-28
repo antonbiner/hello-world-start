@@ -334,7 +334,7 @@ export function EditOffer() {
         contactAddress: data.contactAddress,
         amount: itemsTotal > 0 ? itemsTotal : data.amount,
         currency: data.currency as 'USD' | 'EUR' | 'GBP' | 'TND',
-        status: data.status,
+        status: data.status as Offer['status'],
         category: data.category as Offer['category'],
         source: data.source as Offer['source'],
         notes: data.notes,

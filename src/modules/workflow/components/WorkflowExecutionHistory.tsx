@@ -77,7 +77,7 @@ export function WorkflowExecutionHistory({
   const [searchQuery, setSearchQuery] = useState('');
   const [isPolling, setIsPolling] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-  const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const pollingIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Check if there are any running executions
   const hasRunningExecutions = executions.some(

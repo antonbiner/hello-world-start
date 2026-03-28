@@ -44,7 +44,7 @@ export default function PublicFormPage() {
   // Thank you page state
   const [thankYouResult, setThankYouResult] = useState<ThankYouResult | null>(null);
   const [redirectCountdown, setRedirectCountdown] = useState<number | null>(null);
-  const redirectTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const redirectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   
   // Get language from URL param or fallback to i18n
   const langParam = searchParams.get('lang');

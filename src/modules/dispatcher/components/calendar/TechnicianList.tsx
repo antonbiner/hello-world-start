@@ -1,8 +1,9 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Phone, Mail, Clock, Briefcase, MapPin, Send, User } from "lucide-react";
+import { Phone, Mail, Clock, Briefcase, MapPin, Send, User, Search, CheckCircle, AlertTriangle, XCircle, Circle } from "lucide-react";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { useTranslation } from "react-i18next";
 import { useState, useMemo, useCallback, useEffect } from "react";
+import { Input } from "@/components/ui/input";
 import type { Technician } from "../../types";
 import type { TechnicianScheduleInfo } from "../../hooks/useTechnicianSchedule";
 import { lookupHexColorForStatus } from '@/modules/scheduling/utils';
@@ -163,11 +164,56 @@ export function TechnicianList({
     }
   }, [emailAccounts, t]);
 
+  // Search state
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Filter technicians by search
+  const filteredTechnicians = useMemo(() => {
+    if (!searchTerm.trim()) return technicians;
+    const term = searchTerm.toLowerCase();
+    return technicians.filter(tech => {
+      const fullName = `${tech.firstName} ${tech.lastName}`.toLowerCase();
+      const skillMatch = tech.skills?.some(s => s.toLowerCase().includes(term));
+      const statusMatch = (scheduleMap[tech.id]?.effectiveStatus || tech.status)?.toLowerCase().includes(term);
+      return fullName.includes(term) || skillMatch || statusMatch;
+    });
+  }, [technicians, searchTerm, scheduleMap]);
+
+  // Status icon for accessibility (not color-only)
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'available': return <CheckCircle className="h-2.5 w-2.5 text-success" />;
+      case 'busy': return <AlertTriangle className="h-2.5 w-2.5 text-warning" />;
+      case 'on_leave': return <Circle className="h-2.5 w-2.5 text-secondary-foreground" />;
+      case 'not_working': return <XCircle className="h-2.5 w-2.5 text-destructive" />;
+      case 'offline': return <XCircle className="h-2.5 w-2.5 text-muted-foreground" />;
+      case 'over_capacity': return <AlertTriangle className="h-2.5 w-2.5 text-warning" />;
+      default: return <Circle className="h-2.5 w-2.5 text-muted-foreground" />;
+    }
+  };
+
   return (
     <>
-      <div className="w-52 border-r bg-card/50 backdrop-blur-sm flex-shrink-0">
-        <ScrollArea className="h-full">
-          {technicians.map(technician => {
+      <div className="w-52 border-r bg-card/50 backdrop-blur-sm flex-shrink-0 flex flex-col">
+        {/* Search input */}
+        <div className="p-2 border-b">
+          <div className="relative">
+            <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+            <Input
+              placeholder={t('dispatcher.search_technicians', 'Search...')}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="h-7 pl-7 text-xs"
+            />
+          </div>
+        </div>
+        <ScrollArea className="flex-1">
+          {filteredTechnicians.length === 0 ? (
+            <div className="p-4 text-center text-xs text-muted-foreground">
+              {t('dispatcher.no_technicians_found', 'No technicians found')}
+            </div>
+          ) : (
+          filteredTechnicians.map(technician => {
             const scheduleInfo = scheduleMap[technician.id];
             const effectiveStatus = scheduleInfo?.effectiveStatus || technician.status;
             const workingHours = scheduleInfo?.workingHours || technician.workingHours;
@@ -210,7 +256,7 @@ export function TechnicianList({
                   <div className="text-sm truncate text-foreground group-hover:text-primary transition-colors">
                     {technician.firstName} {technician.lastName}
                   </div>
-                  <div className="flex items-center gap-2 mt-1">
+                  <div className="flex items-center gap-1.5 mt-1">
                     {(() => {
                       const timeAwareStatus = getTimeAwareStatus(
                         effectiveStatus, 
@@ -218,11 +264,14 @@ export function TechnicianList({
                         scheduleInfo?.isOnLeave || false
                       );
                       return (
-                        <div className="text-xs text-muted-foreground">
-                          {scheduleInfo?.isOnLeave && scheduleInfo.leaveType 
-                            ? `${timeAwareStatus.label} (${scheduleInfo.leaveType})`
-                            : timeAwareStatus.label
-                          }
+                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                          {getStatusIcon(timeAwareStatus.status)}
+                          <span className="truncate">
+                            {scheduleInfo?.isOnLeave && scheduleInfo.leaveType 
+                              ? `${timeAwareStatus.label} (${scheduleInfo.leaveType})`
+                              : timeAwareStatus.label
+                            }
+                          </span>
                         </div>
                       );
                     })()}
@@ -230,7 +279,8 @@ export function TechnicianList({
                 </div>
               </div>
             );
-          })}
+          })
+          )}
         </ScrollArea>
       </div>
 

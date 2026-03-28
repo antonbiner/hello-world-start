@@ -98,13 +98,13 @@ export function CalendarGrid({
     return 'overloaded';
   };
 
-  // Get heatmap CSS classes for workload level
+  // Get heatmap CSS classes for workload level — stronger colors for visibility
   const getHeatmapClasses = (level: 'light' | 'normal' | 'heavy' | 'overloaded' | null): string => {
     switch (level) {
-      case 'light': return 'bg-success/5';
-      case 'normal': return 'bg-warning/5';
-      case 'heavy': return 'bg-warning/10';
-      case 'overloaded': return 'bg-destructive/5';
+      case 'light': return 'bg-success/10';
+      case 'normal': return 'bg-warning/15';
+      case 'heavy': return 'bg-warning/25';
+      case 'overloaded': return 'bg-destructive/20';
       default: return '';
     }
   };
@@ -114,8 +114,19 @@ export function CalendarGrid({
     switch (level) {
       case 'light': return 'bg-success';
       case 'normal': return 'bg-warning';
-      case 'heavy': return 'bg-warning';
+      case 'heavy': return 'bg-orange-500';
       case 'overloaded': return 'bg-destructive animate-pulse';
+      default: return '';
+    }
+  };
+
+  // Get workload label for accessibility
+  const getWorkloadLabel = (level: 'light' | 'normal' | 'heavy' | 'overloaded' | null): string => {
+    switch (level) {
+      case 'light': return t('dispatcher.workload.light', 'Light');
+      case 'normal': return t('dispatcher.workload.normal', 'Normal');
+      case 'heavy': return t('dispatcher.workload.heavy', 'Heavy');
+      case 'overloaded': return t('dispatcher.workload.overloaded', 'Overloaded');
       default: return '';
     }
   };
@@ -280,10 +291,11 @@ export function CalendarGrid({
                   } ${isDayNotPlannable ? 'pointer-events-none' : ''}`}
                   style={widthMode === 'scroll' ? { width: `${dateWidth}px` } : { minWidth: `${dateWidth}px` }}
                 >
-                  {/* Workload heatmap indicator dot */}
+                  {/* Workload heatmap indicator with label */}
                   {workloadLevel && !isDayNotPlannable && (
-                    <div className="absolute top-1 right-1 z-30 flex items-center gap-0.5" title={t(`dispatcher.workload.${workloadLevel}`)}>
-                      <div className={`w-1.5 h-1.5 rounded-full ${heatmapDotColor}`} />
+                    <div className="absolute top-0.5 right-0.5 z-30 flex items-center gap-1 px-1 py-0.5 rounded-sm bg-background/80 backdrop-blur-sm" title={getWorkloadLabel(workloadLevel)}>
+                      <div className={`w-2 h-2 rounded-full ${heatmapDotColor}`} />
+                      <span className="text-[9px] font-medium text-foreground/70">{getWorkloadLabel(workloadLevel)}</span>
                     </div>
                   )}
                   {/* Leave overlay - Green */}

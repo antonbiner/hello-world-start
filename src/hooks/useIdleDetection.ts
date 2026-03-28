@@ -20,8 +20,8 @@ export function useIdleDetection(): IdleState {
     canSafelyReload: false,
   });
 
-  const idleTimerRef = useRef<NodeJS.Timeout>();
-  const editingTimerRef = useRef<NodeJS.Timeout>();
+  const idleTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const editingTimerRef = useRef<ReturnType<typeof setTimeout>>();
   const lastActivityRef = useRef<number>(Date.now());
 
   // Detect when user is editing forms

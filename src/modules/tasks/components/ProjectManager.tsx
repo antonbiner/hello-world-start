@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { usePaginatedData } from "@/shared/hooks/usePagination";
 import { formatStatValue } from "@/lib/formatters";
@@ -21,7 +21,7 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Project, ProjectStats, Task } from "../types";
+import { Project, ProjectStats, Task, Technician } from "../types";
 import { ProjectsList } from "./ProjectsList";
 import { ProjectsTable } from "./ProjectsTable";
 import { EditProjectModal } from "./EditProjectModal";
@@ -36,17 +36,9 @@ import { DeleteConfirmationModal } from "@/shared/components/DeleteConfirmationM
 // Import services
 import { ProjectsService, type CreateProjectRequestDto, type UpdateProjectRequestDto } from "../services/projects.service";
 import { TasksService } from "../services/tasks.service";
+import { usersApi } from "@/services/api/usersApi";
 
-// Import mock data for technicians only (users API can be used later)
-import mockTechniciansData from "@/data/mock/technicians.json";
 import defaultColumnsData from "@/data/mock/defaultColumns.json";
-
-// Convert JSON data to proper types
-const mockTechnicians = mockTechniciansData.map(tech => ({
-  ...tech,
-  role: tech.position,
-  isActive: tech.status === 'Active'
-}));
 
 const defaultColumns = defaultColumnsData.map(col => ({
   ...col,
@@ -78,6 +70,7 @@ export function ProjectManager({ onSwitchToTasks: _onSwitchToTasks }: ProjectMan
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectStatsMap, setProjectStatsMap] = useState<Record<string, ProjectStats>>({});
   const [loading, setLoading] = useState(true);
+  const [teamUsers, setTeamUsers] = useState<Technician[]>([]);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<'all' | Project['status']>('all');
@@ -96,6 +89,26 @@ export function ProjectManager({ onSwitchToTasks: _onSwitchToTasks }: ProjectMan
   // Delete confirmation state
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
+
+  // Fetch real users for team/owner display
+  useEffect(() => {
+    usersApi.getAll()
+      .then(res => {
+        const users = res.users || [];
+        setTeamUsers(users.map((u: any) => ({
+          id: String(u.id),
+          name: `${u.firstName || ''} ${u.lastName || ''}`.trim() || u.email || '',
+          email: u.email || '',
+          role: u.role || '',
+          isActive: u.isActive !== false,
+          avatar: u.profilePictureUrl,
+        })));
+      })
+      .catch(() => {
+        // Fallback: empty — components handle missing gracefully
+        setTeamUsers([]);
+      });
+  }, []);
 
   // Log search when search term changes (with debounce effect)
   useEffect(() => {
@@ -127,103 +140,66 @@ export function ProjectManager({ onSwitchToTasks: _onSwitchToTasks }: ProjectMan
       const fetchedProjects = await ProjectsService.getAllProjects();
       setProjects(fetchedProjects);
 
-      // Build per-project task stats from Tasks API (the /Projects/{id}/stats endpoint isn't available)
-      const statsResults = await Promise.all(
-        fetchedProjects.map(async (project) => {
-          const projectId = parseInt(project.id, 10);
-          if (isNaN(projectId)) {
-            return {
-              id: project.id,
-              stats: {
-                totalTasks: 0,
-                completedTasks: 0,
-                overdueTasks: 0,
-                activeMembers: project.teamMembers?.length || 0,
-                completionPercentage: 0,
-              },
-            };
-          }
+      // Show projects immediately, load stats in background
+      setLoading(false);
 
-          try {
-            const tasks = await TasksService.getProjectTasks(projectId);
-
-            // Identify “done” columns for this project (handles EN/FR titles)
-            const doneColumnIds = new Set(
-              (project.columns || [])
-                .filter((c) => {
-                  const title = (c.title || '').toLowerCase();
-                  return (
-                    title.includes('done') ||
-                    title.includes('complete') ||
-                    title.includes('completed') ||
-                    title.includes('termin') ||
-                    title.includes('fini') ||
-                    title.includes('fait')
-                  );
-                })
-                .map((c) => c.id)
-            );
-
-            const isCompleted = (task: Task) => {
-              if (task.completedAt) return true;
-              if (doneColumnIds.has(task.columnId)) return true;
-              const colTitle = (task.columnTitle || '').toLowerCase();
-              if (
-                colTitle.includes('done') ||
-                colTitle.includes('complete') ||
-                colTitle.includes('completed') ||
-                colTitle.includes('termin') ||
-                colTitle.includes('fini') ||
-                colTitle.includes('fait')
-              ) {
-                return true;
-              }
-              const status = (task.status || '').toLowerCase();
-              return status === 'completed' || status === 'done';
-            };
-
-            const totalTasks = tasks.length;
-            const completedTasks = tasks.filter(isCompleted).length;
-
-            const now = new Date();
-            const overdueTasks = tasks.filter((t) => {
-              if (!t.dueDate) return false;
-              return t.dueDate < now && !isCompleted(t);
-            }).length;
-
-            return {
-              id: project.id,
-              stats: {
-                totalTasks,
-                completedTasks,
-                overdueTasks,
-                activeMembers: project.teamMembers?.length || 0,
-                completionPercentage: totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0,
-              },
-            };
-          } catch {
-            // Avoid noisy console logs (error tracking) — fall back gracefully
-            return {
-              id: project.id,
-              stats: {
-                totalTasks: 0,
-                completedTasks: 0,
-                overdueTasks: 0,
-                activeMembers: project.teamMembers?.length || 0,
-                completionPercentage: 0,
-              },
-            };
-          }
-        })
-      );
-
+      // Use the dedicated completion percentage endpoint when possible,
+      // falling back to task-count based stats. Limit concurrency to 4.
+      const CONCURRENCY = 4;
       const statsMap: Record<string, ProjectStats> = {};
-      for (const result of statsResults) statsMap[result.id] = result.stats;
-      setProjectStatsMap(statsMap);
+      
+      const buildStatsForProject = async (project: Project) => {
+        const projectId = parseInt(project.id, 10);
+        const defaultStats: ProjectStats = {
+          totalTasks: 0,
+          completedTasks: 0,
+          overdueTasks: 0,
+          activeMembers: project.teamMembers?.length || 0,
+          completionPercentage: project.progress || 0,
+        };
+        if (isNaN(projectId)) return { id: project.id, stats: defaultStats };
+
+        try {
+          // Try bulk stats endpoint first (single request vs fetching all tasks)
+          const [statusCounts, completionPct] = await Promise.all([
+            TasksService.getTaskStatusCounts(projectId).catch(() => ({})),
+            TasksService.getTaskCompletionPercentage(projectId).catch(() => 0),
+          ]);
+
+          const totalTasks = Object.values(statusCounts).reduce((a, b) => a + b, 0);
+          const completedTasks = (statusCounts['done'] || 0) + (statusCounts['completed'] || 0);
+          const overdueTasks = statusCounts['overdue'] || 0;
+
+          return {
+            id: project.id,
+            stats: {
+              totalTasks,
+              completedTasks,
+              overdueTasks,
+              activeMembers: project.teamMembers?.length || 0,
+              completionPercentage: completionPct || (totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0),
+            },
+          };
+        } catch {
+          return { id: project.id, stats: defaultStats };
+        }
+      };
+
+      // Process in batches for controlled concurrency
+      for (let i = 0; i < fetchedProjects.length; i += CONCURRENCY) {
+        const batch = fetchedProjects.slice(i, i + CONCURRENCY);
+        const results = await Promise.allSettled(batch.map(buildStatsForProject));
+        for (const r of results) {
+          if (r.status === 'fulfilled') {
+            statsMap[r.value.id] = r.value.stats;
+          }
+        }
+        // Update progressively so the UI fills in
+        setProjectStatsMap(prev => ({ ...prev, ...statsMap }));
+      }
     } catch (error) {
       console.error('Failed to fetch projects:', error);
       toast.error(t('projects.toast.loadError'));
-    } finally {
       setLoading(false);
     }
   }, []);
@@ -474,7 +450,7 @@ export function ProjectManager({ onSwitchToTasks: _onSwitchToTasks }: ProjectMan
       <KanbanBoard 
         project={selectedProject}
         onBackToProjects={backToProjects}
-        technicians={mockTechnicians}
+        technicians={teamUsers}
       />
     );
   }
@@ -483,7 +459,7 @@ export function ProjectManager({ onSwitchToTasks: _onSwitchToTasks }: ProjectMan
     return (
       <KanbanBoard 
         onBackToProjects={() => setActiveView('projects')}
-        technicians={mockTechnicians}
+        technicians={teamUsers}
         isDailyTasks={true}
       />
     );
@@ -655,46 +631,49 @@ export function ProjectManager({ onSwitchToTasks: _onSwitchToTasks }: ProjectMan
         <div className="p-3 sm:p-4 border-b border-border bg-background/50">
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
             <div className="flex-1 grid grid-cols-1 sm:grid-cols-4 gap-2">
-              <div className="relative">
-                <select className="border rounded px-3 py-2 pr-10 appearance-none bg-background text-foreground w-full" value={filterStatus} onChange={e => setFilterStatus(e.target.value as any)}>
-                  <option value="all">{t('projects.manager.allStatuses')}</option>
-                  <option value="active">{t('projects.manager.active')}</option>
-                  <option value="completed">{t('projects.manager.completed')}</option>
-                  <option value="on-hold">{t('projects.manager.onHold')}</option>
-                  <option value="cancelled">{t('projects.manager.cancelled')}</option>
-                </select>
-                <ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              </div>
-              <div className="relative">
-                <select className="border rounded px-3 py-2 pr-10 appearance-none bg-background text-foreground w-full" value={filterType} onChange={e => setFilterType(e.target.value as any)}>
-                  <option value="all">{t('projects.manager.allTypes')}</option>
-                  <option value="service">{t('projects.manager.service')}</option>
-                  <option value="sales">{t('projects.manager.sales')}</option>
-                  <option value="internal">{t('projects.manager.internal')}</option>
-                  <option value="custom">{t('projects.manager.custom')}</option>
-                </select>
-                <ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              </div>
-              <div>
-                <select className="border rounded px-3 py-2 pr-10 appearance-none bg-background text-foreground w-full" value={filterOwner} onChange={e => setFilterOwner(e.target.value)}>
-                  <option value="all">{t('projects.manager.allOwners')}</option>
-                  {mockTechnicians.map(t => (
-                    <option key={t.id} value={t.id}>{t.name}</option>
+              <Select value={filterStatus} onValueChange={(v) => setFilterStatus(v as any)}>
+                <SelectTrigger><SelectValue placeholder={t('projects.manager.allStatuses')} /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t('projects.manager.allStatuses')}</SelectItem>
+                  <SelectItem value="active">{t('projects.manager.active')}</SelectItem>
+                  <SelectItem value="completed">{t('projects.manager.completed')}</SelectItem>
+                  <SelectItem value="on-hold">{t('projects.manager.onHold')}</SelectItem>
+                  <SelectItem value="cancelled">{t('projects.manager.cancelled')}</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={filterType} onValueChange={(v) => setFilterType(v as any)}>
+                <SelectTrigger><SelectValue placeholder={t('projects.manager.allTypes')} /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t('projects.manager.allTypes')}</SelectItem>
+                  <SelectItem value="service">{t('projects.manager.service')}</SelectItem>
+                  <SelectItem value="sales">{t('projects.manager.sales')}</SelectItem>
+                  <SelectItem value="internal">{t('projects.manager.internal')}</SelectItem>
+                  <SelectItem value="custom">{t('projects.manager.custom')}</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={filterOwner} onValueChange={(v) => setFilterOwner(v)}>
+                <SelectTrigger><SelectValue placeholder={t('projects.manager.allOwners')} /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t('projects.manager.allOwners')}</SelectItem>
+                  {teamUsers.map(u => (
+                    <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
                   ))}
-                </select>
-              </div>
-              <div className="relative">
-                <select className="border rounded px-3 py-2 pr-10 appearance-none bg-background text-foreground w-full" value={filterTimeframe} onChange={e => setFilterTimeframe(e.target.value as any)}>
-                  <option value="all">{t('projects.manager.anyTime')}</option>
-                  <option value="7">{t('projects.manager.last7')}</option>
-                  <option value="30">{t('projects.manager.last30')}</option>
-                  <option value="365">{t('projects.manager.last365')}</option>
-                </select>
-                <ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              </div>
+                </SelectContent>
+              </Select>
+              <Select value={filterTimeframe} onValueChange={(v) => setFilterTimeframe(v as any)}>
+                <SelectTrigger><SelectValue placeholder={t('projects.manager.anyTime')} /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t('projects.manager.anyTime')}</SelectItem>
+                  <SelectItem value="7">{t('projects.manager.last7')}</SelectItem>
+                  <SelectItem value="30">{t('projects.manager.last30')}</SelectItem>
+                  <SelectItem value="365">{t('projects.manager.last365')}</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <div className="flex items-center gap-2">
-              <button className="px-3 py-1 rounded-full border border-border text-sm" onClick={() => { setFilterStatus('all'); setFilterType('all'); setFilterOwner('all'); setFilterTimeframe('all'); setShowFilterBar(false); }}>{t('projects.manager.clear')}</button>
+              <Button variant="outline" size="sm" className="rounded-full" onClick={() => { setFilterStatus('all'); setFilterType('all'); setFilterOwner('all'); setFilterTimeframe('all'); setShowFilterBar(false); }}>
+                {t('projects.manager.clear')}
+              </Button>
             </div>
           </div>
         </div>
@@ -722,7 +701,7 @@ export function ProjectManager({ onSwitchToTasks: _onSwitchToTasks }: ProjectMan
                     <ProjectsList
                       projects={filteredProjects}
                       projectStats={projectStats}
-                      technicians={mockTechnicians}
+                      technicians={teamUsers}
                       onOpenProject={handleOpenProject}
                       onEditProject={handleEditProject}
                       onDeleteProject={handleRequestDeleteProject}
@@ -738,7 +717,7 @@ export function ProjectManager({ onSwitchToTasks: _onSwitchToTasks }: ProjectMan
                   <ProjectsTable
                     projects={pagination.data}
                     projectStats={projectStats}
-                    technicians={mockTechnicians}
+                    technicians={teamUsers}
                     onOpenProject={handleOpenProject}
                     onEditProject={handleEditProject}
                     onDeleteProject={handleRequestDeleteProject}
@@ -771,14 +750,14 @@ export function ProjectManager({ onSwitchToTasks: _onSwitchToTasks }: ProjectMan
         }}
         onUpdateProject={handleUpdateProject}
         project={editingProject}
-        technicians={mockTechnicians}
+        technicians={teamUsers}
       />
 
       <QuickTaskModal
         isOpen={isQuickTaskModalOpen}
         onClose={() => setIsQuickTaskModalOpen(false)}
         onCreateTask={handleCreateTask}
-        technicians={mockTechnicians}
+        technicians={teamUsers}
         columns={defaultColumns}
         projects={projects}
       />

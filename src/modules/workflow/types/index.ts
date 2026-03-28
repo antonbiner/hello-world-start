@@ -65,6 +65,7 @@ export interface WorkflowTechnician {
 export interface WorkflowDispatch {
   id: string;
   serviceOrderId: string;
+  dispatchNumber?: string;
   title: string;
   description?: string;
   status: 'scheduled' | 'en_route' | 'in_progress' | 'completed' | 'cancelled';
@@ -72,7 +73,7 @@ export interface WorkflowDispatch {
   assignedTechnician?: WorkflowTechnician;
   startAt?: Date;
   endAt?: Date;
-  estimatedDuration: number; // minutes
+  estimatedDuration: number;
   location: {
     address: string;
     lat?: number;

@@ -329,7 +329,7 @@ export function PayrollPage() {
         acc.totalCnss += Number(e.cnss || 0);
         acc.totalIrpp += Number(e.irpp || 0);
         acc.totalCss += Number(e.css || 0);
-        acc.missingSalary += e.issues?.includes(t('payrollDraft.issues.missingSalary')) ? 1 : 0;
+        acc.missingSalary += (e as any).issues?.includes(t('payrollDraft.issues.missingSalary')) ? 1 : 0;
         return acc;
       },
       { totalGross: 0, totalNet: 0, totalCnss: 0, totalIrpp: 0, totalCss: 0, missingSalary: 0 }

@@ -49,6 +49,7 @@ interface LocalTask {
   lastMoved?: Date;
   projectName?: string;
   projectId?: string;
+  status?: string;
 }
 
 
@@ -1037,7 +1038,7 @@ export function KanbanBoard({ project, onBackToProjects, onSwitchToProjects, tec
         <TaskDetailModal 
           open={isTaskModalOpen} 
           onOpenChange={setIsTaskModalOpen} 
-          task={selectedTask}
+          task={selectedTask ? { ...selectedTask, status: selectedTask.status || selectedTask.columnId || 'open' } as any : undefined}
           onTaskUpdated={handleTaskUpdated}
           onTaskDeleted={handleTaskDeleted}
           technicians={apiTechnicians}

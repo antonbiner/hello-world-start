@@ -127,8 +127,8 @@ export function QuickTaskModal({
       status: formData.columnId, // Will be updated to match column
       relatedEntityType: formData.projectId !== 'none' ? 'project' : undefined,
       relatedEntityId: formData.projectId !== 'none' ? formData.projectId : undefined,
-      assigneeUserId: assigneeId, // Mapped locally, assigneeId will be handled by the server
-      assigneeUserName: assigneeName,
+      assigneeId: assigneeId,
+      assigneeName: assigneeName,
       dueDate: formData.dueDate ? new Date(formData.dueDate) : undefined,
     };
 

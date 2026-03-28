@@ -87,7 +87,7 @@ export interface CreateOfferData {
   contactEmail: string;
   contactPhone: string;
   contactAddress: string;
-  status: 'draft' | 'sent' | 'created';
+  status: 'draft' | 'sent' | 'created' | 'pending' | 'negotiation' | 'accepted' | 'won' | 'lost' | 'cancelled' | 'rejected' | 'expired' | 'declined' | 'modified';
   category: string; // Dynamic from lookups
   source: string;   // Dynamic from lookups
   amount: number;

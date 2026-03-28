@@ -179,7 +179,7 @@ export function getVisibleRange(
  * Measure component render time (development only)
  */
 export function measureRender(componentName: string): () => void {
-  if (process.env.NODE_ENV !== 'development') {
+  if (import.meta.env.MODE !== 'development') {
     return () => {};
   }
   

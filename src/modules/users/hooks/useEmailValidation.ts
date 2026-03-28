@@ -11,7 +11,7 @@ interface EmailValidationResult {
 export function useEmailValidation(excludeUserId?: number): EmailValidationResult {
   const [isChecking, setIsChecking] = useState(false);
   const [emailError, setEmailError] = useState<string | null>(null);
-  const debounceRef = useRef<NodeJS.Timeout | null>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastCheckedEmail = useRef<string>('');
 
   const clearError = useCallback(() => {

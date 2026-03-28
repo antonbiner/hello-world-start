@@ -187,6 +187,26 @@
 		"resumeProject": "Reprendre le Projet",
 		"markComplete": "Marquer Terminé",
 		"deleteProject": "Supprimer le Projet",
+		"overdue": "En retard",
+		"progress": "Progression",
+		"table": {
+			"project": "Projet",
+			"type": "Type",
+			"status": "Statut",
+			"progress": "Progression",
+			"team": "Équipe",
+			"startDate": "Date de début",
+			"showing": "Affichage de {{from}} à {{to}} sur {{total}} résultats",
+			"previous": "Précédent",
+			"next": "Suivant"
+		},
+		"card": {
+			"openProject": "Ouvrir le Projet",
+			"overdue": "En retard",
+			"tasks": "Tâches :",
+			"team": "Équipe :",
+			"due": "Échéance :"
+		},
 		"status": {
 			"active": "actif",
 			"completed": "terminé",

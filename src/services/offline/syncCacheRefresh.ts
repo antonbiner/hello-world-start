@@ -43,8 +43,31 @@ export function getHydrationRefreshPathsForEntityTypes(entityTypes: Iterable<str
       const uid = getCurrentUserIdFromStorage();
       if (uid != null) paths.add(`/api/Tasks/daily/user/${uid}`);
     }
+    if (et === "task") {
+      // Refresh project task lists — we don't know which project, so refresh search
+      paths.add("/api/tasks/search");
+      paths.add("/api/tasks/overdue");
+    }
+    if (et === "project") {
+      paths.add("/api/Projects?pageNumber=1&pageSize=50");
+      paths.add("/api/Projects/settings");
+    }
+    if (et === "contact") {
+      paths.add("/api/Contacts?pageNumber=1&pageSize=50");
+    }
+    if (et === "article") {
+      paths.add("/api/articles?page=1&limit=100");
+      paths.add("/api/articles/categories");
+      paths.add("/api/articles/locations");
+      paths.add("/api/articles/groups");
+    }
+    if (et === "document") {
+      paths.add("/api/Documents");
+      paths.add("/api/Documents/stats");
+    }
     if (et === "dispatch" || et.startsWith("dispatch_")) {
       paths.add("/api/dispatches?pageNumber=1&pageSize=50");
+      paths.add("/api/dispatches/statistics");
     }
     if (et.startsWith("planning_")) {
       paths.add("/api/planning/unassigned-jobs?page=1&page_size=50");
@@ -66,6 +89,25 @@ export function getHydrationRefreshPathsForEntityTypes(entityTypes: Iterable<str
     }
     if (et === "service_order" || et === "service_order_job") {
       paths.add("/api/service-orders?page=1&pageSize=50");
+      paths.add("/api/service-orders/statistics");
+    }
+    if (et === "installation") {
+      paths.add("/api/installations?page=1&page_size=50");
+    }
+    if (et === "lookup_item" || et === "lookup_bulk" || et === "currency") {
+      paths.add("/api/Lookups/currencies");
+    }
+    if (et === "stock_transaction") {
+      paths.add("/api/articles/transactions");
+    }
+    if (et === "dynamic_form" || et === "dynamic_form_response") {
+      paths.add("/api/DynamicForms");
+    }
+    if (et === "task_checklist" || et === "task_checklist_item") {
+      // Checklists are per-task; can't refresh all, but notify listeners
+    }
+    if (et === "synced_email" || et === "email_account") {
+      // Email sync is per-account; no global list to refresh
     }
   }
   return [...paths];

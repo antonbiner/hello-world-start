@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -5,7 +6,6 @@ import { Progress } from "@/components/ui/progress";
 import { 
   FolderOpen, 
   Users, 
-  
   MoreVertical, 
   Play, 
   Pause, 
@@ -69,6 +69,7 @@ export function ProjectCard({
   onDeleteProject,
   onToggleStatus
 }: ProjectCardProps) {
+  const { t } = useTranslation('tasks');
   const StatusIcon = getStatusIcon(project.status);
   const isOverdue = project.endDate && new Date() > new Date(project.endDate) && project.status !== 'completed';
 
@@ -99,28 +100,28 @@ export function ProjectCard({
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => onOpenProject(project)}>
                 <FolderOpen className="h-4 w-4 mr-2" />
-                Open Project
+                {t('projects.list.card.openProject')}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => onEditProject(project)}>
-                Edit Project
+                {t('projects.list.editProject')}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               {project.status === 'active' && (
                 <DropdownMenuItem onClick={() => onToggleStatus(project.id, 'on-hold')}>
                   <Pause className="h-4 w-4 mr-2" />
-                  Pause Project
+                  {t('projects.list.pauseProject')}
                 </DropdownMenuItem>
               )}
               {project.status === 'on-hold' && (
                 <DropdownMenuItem onClick={() => onToggleStatus(project.id, 'active')}>
                   <Play className="h-4 w-4 mr-2" />
-                  Resume Project
+                  {t('projects.list.resumeProject')}
                 </DropdownMenuItem>
               )}
               {project.status !== 'completed' && (
                 <DropdownMenuItem onClick={() => onToggleStatus(project.id, 'completed')}>
                   <CheckCircle className="h-4 w-4 mr-2" />
-                  Mark Complete
+                  {t('projects.list.markComplete')}
                 </DropdownMenuItem>
               )}
               <DropdownMenuSeparator />
@@ -128,7 +129,7 @@ export function ProjectCard({
                 className="text-destructive"
                 onClick={() => onDeleteProject(project.id)}
               >
-                Delete Project
+                {t('projects.list.deleteProject')}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -142,15 +143,15 @@ export function ProjectCard({
         <div className="flex items-center gap-2 flex-wrap">
           <Badge className={getStatusColor(project.status)}>
             <StatusIcon className="h-3 w-3 mr-1" />
-            {project.status}
+            {t(`projects.list.status.${project.status}`, { defaultValue: project.status })}
           </Badge>
           <Badge variant="outline" className={getTypeColor(project.type)}>
-            {project.type}
+            {t(`projects.list.type.${project.type}`, { defaultValue: project.type })}
           </Badge>
           {isOverdue && (
             <Badge className="status-error">
               <AlertTriangle className="h-3 w-3 mr-1" />
-              Overdue
+              {t('projects.list.card.overdue')}
             </Badge>
           )}
         </div>
@@ -158,7 +159,7 @@ export function ProjectCard({
         <div className="space-y-3">
           <div>
             <div className="flex items-center justify-between text-sm mb-1">
-              <span className="text-muted-foreground">Progress</span>
+              <span className="text-muted-foreground">{t('projects.list.progress')}</span>
               <span className="font-medium">{stats.completionPercentage}%</span>
             </div>
             <Progress value={stats.completionPercentage} className="h-2" />
@@ -167,24 +168,24 @@ export function ProjectCard({
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div className="space-y-1">
               <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Tasks:</span>
+                <span className="text-muted-foreground">{t('projects.list.card.tasks')}</span>
                 <span className="font-medium">{stats.completedTasks}/{stats.totalTasks}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Team:</span>
+                <span className="text-muted-foreground">{t('projects.list.card.team')}</span>
                 <span className="font-medium">{stats.activeMembers}</span>
               </div>
             </div>
             <div className="space-y-1">
               {stats.overdueTasks > 0 && (
                 <div className="flex items-center justify-between">
-                  <span className="text-destructive">Overdue:</span>
+                  <span className="text-destructive">{t('projects.list.card.overdue')}:</span>
                   <span className="font-medium text-destructive">{stats.overdueTasks}</span>
                 </div>
               )}
               {project.endDate && (
                 <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Due:</span>
+                  <span className="text-muted-foreground">{t('projects.list.card.due')}</span>
                   <span className="font-medium">{new Date(project.endDate).toLocaleDateString()}</span>
                 </div>
               )}

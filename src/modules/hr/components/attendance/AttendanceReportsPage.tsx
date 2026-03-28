@@ -122,7 +122,7 @@ export function AttendanceReportsPage() {
     const userToDept = new Map<number, string>();
     for (const e of employees) {
       const uid = Number(e?.user?.id);
-      const dept = (e?.salaryConfig?.department ?? e?.department ?? '—') || 'Unassigned';
+      const dept = (e?.salaryConfig?.department ?? '—') || 'Unassigned';
       if (Number.isFinite(uid)) userToDept.set(uid, dept);
     }
 

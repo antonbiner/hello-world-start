@@ -90,7 +90,7 @@ export function SiteProvider({
   const siteRef = useRef(state.site);
   siteRef.current = state.site;
   
-  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isSavingRef = useRef(false);
 
   // ── Auto-save logic ──

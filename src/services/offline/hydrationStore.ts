@@ -107,6 +107,14 @@ const LOOSE_HYDRATION_LIST_PATHS = new Set([
   "/api/calendar/events",
   "/api/calendar/event-types",
   "/api/dashboards",
+  // HR & planning
+  "/api/hr/employees",
+  "/api/hr/departments",
+  "/api/hr/attendance",
+  "/api/hr/leaves/balances",
+  "/api/hr/payroll/runs",
+  // Stock & inventory
+  "/api/stock-transactions",
 ]);
 
 /** True when any cached GET for this pathname may satisfy a different query string for the same path. */

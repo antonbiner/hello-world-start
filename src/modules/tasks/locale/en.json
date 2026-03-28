@@ -187,6 +187,26 @@
 			"resumeProject": "Resume Project",
 			"markComplete": "Mark Complete",
 			"deleteProject": "Delete Project",
+			"overdue": "Overdue",
+			"progress": "Progress",
+			"table": {
+				"project": "Project",
+				"type": "Type",
+				"status": "Status",
+				"progress": "Progress",
+				"team": "Team",
+				"startDate": "Start Date",
+				"showing": "Showing {{from}} to {{to}} of {{total}} results",
+				"previous": "Previous",
+				"next": "Next"
+			},
+			"card": {
+				"openProject": "Open Project",
+				"overdue": "Overdue",
+				"tasks": "Tasks:",
+				"team": "Team:",
+				"due": "Due:"
+			},
 			"status": {
 				"active": "active",
 				"completed": "completed",

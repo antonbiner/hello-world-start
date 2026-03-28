@@ -30,7 +30,7 @@ export function useSmoothAppUpdate() {
   const { isIdle, canSafelyReload } = useIdleDetection();
   const currentVersionRef = useRef<string | null>(null);
   const reloadScheduledRef = useRef(false);
-  const reloadTimeoutRef = useRef<NodeJS.Timeout>();
+  const reloadTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
   const lastCheckRef = useRef<number>(0);
 
   const checkVersion = useCallback(async () => {

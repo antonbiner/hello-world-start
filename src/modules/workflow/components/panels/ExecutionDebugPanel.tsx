@@ -73,7 +73,7 @@ export function ExecutionDebugPanel({
   const [isPolling, setIsPolling] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [expandedLogs, setExpandedLogs] = useState<Set<number>>(new Set());
-  const pollingRef = useRef<NodeJS.Timeout | null>(null);
+  const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const hasRunning = executions.some(e => e.status === 'running' || e.status === 'waiting_approval');
 

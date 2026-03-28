@@ -45,6 +45,7 @@ export function DailyTaskDetailModal({
   const [editDescription, setEditDescription] = useState("");
   const [editTaskType, setEditTaskType] = useState<string>("follow-up");
   const [editStatus, setEditStatus] = useState<string>("open");
+  const [editPriority, setEditPriority] = useState<string>("medium");
   const [editDueDate, setEditDueDate] = useState<Date | undefined>(undefined);
   const [editRelatedEntityType, setEditRelatedEntityType] = useState<string>("");
   const [editRelatedEntityId, setEditRelatedEntityId] = useState<string>("");

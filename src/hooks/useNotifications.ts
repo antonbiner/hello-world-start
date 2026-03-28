@@ -109,7 +109,7 @@ export function useNotifications(autoRefresh = true, refreshInterval = POLLING_I
   useEffect(() => {
     if (!autoRefresh) return;
     
-    let intervalId: NodeJS.Timeout | null = null;
+    let intervalId: ReturnType<typeof setInterval> | null = null;
     
     const startPolling = () => {
       // Clear existing interval
