@@ -19,7 +19,8 @@ export function EmployeeList() {
   const [q, setQ] = useState('');
   const [salaryFilter, setSalaryFilter] = useState<'all' | 'missing' | 'ready'>('all');
 
-  const rows = employeesQuery.data ?? [];
+  const source = employeesQuery.data as any;
+  const rows = Array.isArray(source) ? source : (source?.data && Array.isArray(source.data) ? source.data : []);
   const filtered = useMemo(() => {
     const s = q.trim().toLowerCase();
     if (!s) return rows;

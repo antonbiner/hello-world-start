@@ -31,7 +31,8 @@ export function EmployeeDetail() {
   const { attendanceQuery } = useAttendance({ month: now.getMonth() + 1, year: now.getFullYear() });
 
   const employee = useMemo(() => {
-    const rows = employeesQuery.data ?? [];
+    const source = employeesQuery.data as any;
+    const rows = Array.isArray(source) ? source : (source?.data && Array.isArray(source.data) ? source.data : []);
     return rows.find((r: any) => Number(r?.user?.id) === userId) ?? null;
   }, [employeesQuery.data, userId]);
 
@@ -93,15 +94,17 @@ export function EmployeeDetail() {
   };
 
   const pendingLeavesCount = useMemo(() => {
-    const list = planningLeavesQuery.data ?? [];
-    return list.filter(l => String(l.status) === 'pending').length;
+    const source = planningLeavesQuery.data as any;
+    const list = Array.isArray(source) ? source : (source?.data && Array.isArray(source.data) ? source.data : []);
+    return list.filter((l: any) => String(l.status) === 'pending').length;
   }, [planningLeavesQuery.data]);
 
   const monthAttendanceSummary = useMemo(() => {
-    const records = attendanceQuery.data ?? [];
-    const mine = records.filter(r => r.userId === userId);
-    const present = mine.filter(r => r.status === 'present').length;
-    const late = mine.filter(r => r.status === 'late').length;
+    const source = attendanceQuery.data as any;
+    const records = Array.isArray(source) ? source : (source?.data && Array.isArray(source.data) ? source.data : []);
+    const mine = records.filter((r: any) => r.userId === userId);
+    const present = mine.filter((r: any) => r.status === 'present').length;
+    const late = mine.filter((r: any) => r.status === 'late').length;
     const absent = mine.filter(r => r.status === 'absent').length;
     const leave = mine.filter(r => r.status === 'leave').length;
     return { total: mine.length, present, late, absent, leave };
